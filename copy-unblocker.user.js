@@ -10,6 +10,9 @@
 // @grant        GM.registerMenuCommand
 // @grant        GM_getValue
 // @grant        GM_setValue
+// @icon         https://raw.githubusercontent.com/xianmin/userscript-copy-unblocker/refs/heads/master/icon.svg
+// @homepageURL       https://github.com/xianmin/userscript-copy-unblocker
+// @downloadURL       https://raw.githubusercontent.com/xianmin/userscript-copy-unblocker/refs/heads/master/copy-unblocker.user.js
 // @license        GPLv3 License
 // @require      https://openuserjs.org/src/libs/sizzle/GM_config.js
 // ==/UserScript==

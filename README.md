@@ -5,7 +5,7 @@ Copy Unblocker is a powerful userscript that automatically removes copy restrict
 ## How to Use
 
 1. Install a user script manager like [Tampermonkey - Chrome Web Store](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) or [Greasemonkey – Firefox](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) in your browser
-2. Install the Copy Unblocker script: https://github.com/xianmin/userscript-copy-unblocker/raw/refs/heads/master/copy-unblocker.user.js
+2. Install the Copy Unblocker script: https://raw.githubusercontent.com/xianmin/userscript-copy-unblocker/refs/heads/master/copy-unblocker.user.js
 3. Visit any webpage where you want to enable copying
 4. The script will automatically remove copy restrictions on whitelisted sites
 
