@@ -1,16 +1,59 @@
 // ==UserScript==
-// @name         解除复制限制 - 开关版
+// @name         解除复制限制
 // @namespace    http://tampermonkey.net/
-// @version      1.2
-// @description  通过菜单按钮控制的解除复制限制脚本
+// @version      1.3
+// @description  自动解除复制限制，支持网址匹配列表
 // @author       Pro-Coder
 // @match        *://*/*
-// @run-at       document-start
+// @run-at       document-end
 // @grant        GM.registerMenuCommand
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @require      https://openuserjs.org/src/libs/sizzle/GM_config.js
 // ==/UserScript==
 
 (function () {
   'use strict';
+
+
+  // Initialize GM_config first
+  GM_config.init({
+    id: 'CopyUnblockerConfig',
+    title: '解除复制限制配置',
+    fields: {
+      urlPatterns: {
+        label: '网址匹配列表',
+        type: 'textarea',
+        default: 'https://wx.zsxq.com/'
+      }
+    },
+    events: {
+      init: function () {
+        // If urlPatterns is empty, set the default value
+        if (!GM_config.get('urlPatterns')) {
+          GM_config.set('urlPatterns', 'https://wx.zsxq.com/');
+          GM_config.save();
+        }
+
+        // After config is initialized, check if we should enable copy
+        if (shouldEnableCopy()) {
+          enableCopy();
+        }
+      }
+    }
+  });
+
+  // Modify shouldEnableCopy to handle potential undefined values
+  const shouldEnableCopy = () => {
+    const patterns = GM_config.get('urlPatterns') || '';
+    const currentUrl = window.location.href;
+
+    return patterns.split('\n').some(pattern => {
+      pattern = pattern.trim();
+      if (!pattern) return false;
+      return currentUrl.startsWith(pattern);
+    });
+  };
 
   let isEnabled = false;
   let styleElement = null;
@@ -18,40 +61,49 @@
 
   // 核心功能模块
   const enableCopy = () => {
-    // 1. 启用右键菜单
-    document.addEventListener('contextmenu', contextmenuHandler, true);
+    // Wait for DOM to be fully loaded
+    if (document.readyState !== 'complete') {
+      window.addEventListener('load', () => enableCopy());
+      return;
+    }
 
-    // 2. 注入CSS样式
-    const css = `
-        * {
-            user-select: auto !important;
-            -webkit-user-select: auto !important;
-            -moz-user-select: text !important;
-            -ms-user-select: auto !important;
-        }
+    // Add a small delay to ensure all scripts are loaded
+    setTimeout(() => {
+      // 1. 启用右键菜单
+      document.addEventListener('contextmenu', contextmenuHandler, true);
 
-        [style*="user-select: none"],
-        [style*="user-select:none"] {
-            user-select: auto !important;
-        }`;
+      // 2. 注入CSS样式
+      const css = `
+          * {
+              user-select: auto !important;
+              -webkit-user-select: auto !important;
+              -moz-user-select: text !important;
+              -ms-user-select: auto !important;
+          }
 
-    styleElement = document.createElement('style');
-    styleElement.textContent = css;
-    document.documentElement.appendChild(styleElement);
+          [style*="user-select: none"],
+          [style*="user-select:none"] {
+              user-select: auto !important;
+          }`;
 
-    // 3. 阻止复制拦截
-    document.addEventListener('copy', copyHandler, true);
+      styleElement = document.createElement('style');
+      styleElement.textContent = css;
+      document.documentElement.appendChild(styleElement);
 
-    // 4. 初始化覆盖层移除
-    initOverlayRemoval();
+      // 3. 阻止复制拦截
+      document.addEventListener('copy', copyHandler, true);
 
-    // 5. 恢复选择事件
-    enableSelectionEvents();
+      // 4. 初始化覆盖层移除
+      initOverlayRemoval();
 
-    // 6. 启用快捷键
-    document.addEventListener('keydown', keydownHandler, true);
+      // 5. 恢复选择事件
+      enableSelectionEvents();
 
-    console.log('复制限制已解除');
+      // 6. 启用快捷键
+      document.addEventListener('keydown', keydownHandler, true);
+
+      console.log('复制限制已解除 - DOM fully loaded');
+    }, 1000);
   };
 
   // 禁用功能模块
@@ -128,14 +180,21 @@
     }
   };
 
-  // 注册菜单按钮
-  GM.registerMenuCommand('🔄 切换复制限制解除', () => {
-    isEnabled = !isEnabled;
-    if (isEnabled) {
+  // Replace the menu command registration
+  GM.registerMenuCommand('➕ 添加当前网站到自动解除列表', () => {
+    const currentUrl = window.location.origin + '/';
+    const currentPatterns = GM_config.get('urlPatterns');
+    if (!currentPatterns.includes(currentUrl)) {
+      GM_config.set('urlPatterns', currentPatterns + '\n' + currentUrl);
+      GM_config.save();
       enableCopy();
+      alert(`已添加 ${currentUrl} 到自动解除列表`);
     } else {
-      disableCopy();
+      alert('当前网站已在列表中');
     }
-    alert(`复制限制解除功能已 ${isEnabled ? '启用' : '禁用'}`);
+  });
+
+  GM.registerMenuCommand('⚙️ 打开设置', () => {
+    GM_config.open();
   });
 })();
