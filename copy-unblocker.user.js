@@ -1,14 +1,16 @@
 // ==UserScript==
-// @name         解除复制限制
+// @name         Copy Unblocker
 // @namespace    http://tampermonkey.net/
 // @version      1.3
-// @description  自动解除复制限制，支持网址匹配列表
-// @author       Pro-Coder
+// @description  Automatically removes copy restrictions, supports URL pattern matching
+// @author       xianmin
+// @namespace    https://www.xianmin.org
 // @match        *://*/*
 // @run-at       document-end
 // @grant        GM.registerMenuCommand
 // @grant        GM_getValue
 // @grant        GM_setValue
+// @license        GPLv3 License
 // @require      https://openuserjs.org/src/libs/sizzle/GM_config.js
 // ==/UserScript==
 
@@ -19,10 +21,10 @@
   // Initialize GM_config first
   GM_config.init({
     id: 'CopyUnblockerConfig',
-    title: '解除复制限制配置',
+    title: 'Copy Unblocker Settings',
     fields: {
       urlPatterns: {
-        label: '网址匹配列表',
+        label: 'URL Pattern List',
         type: 'textarea',
         default: 'https://wx.zsxq.com/'
       }
@@ -181,20 +183,20 @@
   };
 
   // Replace the menu command registration
-  GM.registerMenuCommand('➕ 添加当前网站到自动解除列表', () => {
+  GM.registerMenuCommand('➕ Add Current Site to Whitelist', () => {
     const currentUrl = window.location.origin + '/';
     const currentPatterns = GM_config.get('urlPatterns');
     if (!currentPatterns.includes(currentUrl)) {
       GM_config.set('urlPatterns', currentPatterns + '\n' + currentUrl);
       GM_config.save();
       enableCopy();
-      alert(`已添加 ${currentUrl} 到自动解除列表`);
+      alert(`Added ${currentUrl} to whitelist`);
     } else {
-      alert('当前网站已在列表中');
+      alert('Current site is already in the list');
     }
   });
 
-  GM.registerMenuCommand('⚙️ 打开设置', () => {
+  GM.registerMenuCommand('⚙️ Open Settings', () => {
     GM_config.open();
   });
 })();
