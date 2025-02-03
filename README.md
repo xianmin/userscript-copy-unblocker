@@ -1,62 +1,23 @@
 # Copy Unblocker
 
-Copy Unblocker is a powerful userscript that automatically removes copy restrictions from web pages, enabling you to freely copy text and content from websites that typically prevent copying.
+Copy Unblocker is a userscript that automatically removes copy restrictions from web pages, allowing you to freely copy text and content.
 
 ## How to Use
 
-1. Install a user script manager like [Tampermonkey - Chrome Web Store](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) or [Greasemonkey – Firefox](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) in your browser
-2. Install the Copy Unblocker script: https://raw.githubusercontent.com/xianmin/userscript-copy-unblocker/refs/heads/master/copy-unblocker.user.js
-3. Visit any webpage where you want to enable copying
-4. The script will automatically remove copy restrictions on whitelisted sites
+1. Install a browser extension:
+   - Chrome: [Tampermonkey](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
+   - Firefox: [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/)
+2. Install Copy Unblocker script: [Click to Install](https://raw.githubusercontent.com/xianmin/userscript-copy-unblocker/refs/heads/master/copy-unblocker.user.js)
+3. Visit supported websites, and the script will automatically remove copy restrictions
 
 ## Features
 
 - Automatically removes copy restrictions from web pages
 - Enables text selection and right-click context menu
-- Removes overlay elements that block content copying
-- URL pattern matching for selective activation
-- Customizable whitelist for specific websites
-- Keyboard shortcut support (Ctrl+C/Cmd+C)
-- Easy-to-use settings interface
-- Non-intrusive operation
+- Removes overlay elements that block content
+- Supports keyboard shortcuts (Ctrl+C/Cmd+C)
 
-## Advantages
-
-1. **Universal Compatibility**: Works on most websites without breaking their functionality
-2. **Smart Detection**: Intelligently identifies and removes various copy-protection mechanisms
-3. **Selective Activation**: Only runs on websites you choose through the whitelist
-4. **User-Friendly**: Simple interface for managing settings and adding sites
-5. **Resource Efficient**: Minimal impact on page loading and browsing performance
-
-
-### Managing the Whitelist
-
-You can easily manage which websites the script runs on:
-
-1. Click on the Tampermonkey icon in your browser
-2. Select "⚙️ Open Settings" from the menu
-3. Add or remove website URLs in the pattern list
-4. Each URL should be on a new line
-5. Save your changes
-
-### Quick Add to Whitelist
-
-To quickly add the current website to your whitelist:
-
-1. Click on the Tampermonkey icon
-2. Select "➕ Add Current Site to Whitelist"
-3. The current website will be automatically added and activated
-
-### Features in Detail
-
-- **Text Selection**: Enables natural text selection on websites that prevent it
-- **Right-Click Menu**: Restores the context menu functionality
-- **Copy Protection Removal**: Bypasses JavaScript-based copy prevention
-- **Overlay Removal**: Automatically removes elements that block content copying
-- **Keyboard Shortcuts**: Ensures Ctrl+C/Cmd+C work normally
-- **Style Override**: Removes CSS-based copy restrictions
-
-## Technical Details
+## Technical Implementation
 
 The script works by:
 
@@ -64,13 +25,20 @@ The script works by:
 2. Removing event listeners that block copying
 3. Eliminating overlay elements
 4. Restoring native browser copy functionality
-5. Managing a URL pattern-based activation system
 
-## Privacy and Security
+## Adding Support for New Websites
 
-- No data collection or tracking
-- Works entirely client-side
-- No external dependencies except GM_config
-- Open source and transparent operation
+If you want the script to support new websites, you can:
 
-Enjoy unrestricted copying with Copy Unblocker!
+1. Submit an [Issue](https://github.com/xianmin/userscript-copy-unblocker/issues) on GitHub
+2. Or modify the script directly by adding new `@match` rules at the beginning of the code
+
+## Privacy & Security
+
+- Runs entirely client-side
+- No data collection
+- Open source and transparent
+
+## License
+
+GPLv3 License
